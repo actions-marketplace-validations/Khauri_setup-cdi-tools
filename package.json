@@ -17,7 +17,7 @@
     "semver": "^7.3.8"
   },
   "devDependencies": {
-    "@actions/io": "^1.1.2",
+    "@actions/io": "^2.0.0",
     "@types/node": "^18.14.0",
     "@types/semver": "^7.3.12",
     "prettier": "^2.7.1"
