@@ -4,15 +4,29 @@ var __getProtoOf = Object.getPrototypeOf;
 var __defProp = Object.defineProperty;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+function __accessProp(key) {
+  return this[key];
+}
+var __toESMCache_node;
+var __toESMCache_esm;
 var __toESM = (mod, isNodeMode, target) => {
+  var canCache = mod != null && typeof mod === "object";
+  if (canCache) {
+    var cache = isNodeMode ? __toESMCache_node ??= new WeakMap : __toESMCache_esm ??= new WeakMap;
+    var cached = cache.get(mod);
+    if (cached)
+      return cached;
+  }
   target = mod != null ? __create(__getProtoOf(mod)) : {};
   const to = isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target;
   for (let key of __getOwnPropNames(mod))
     if (!__hasOwnProp.call(to, key))
       __defProp(to, key, {
-        get: () => mod[key],
+        get: __accessProp.bind(mod, key),
         enumerable: true
       });
+  if (canCache)
+    cache.set(mod, to);
   return to;
 };
 var __commonJS = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
@@ -427,7 +441,8 @@ var require_tunnel = __commonJS((exports) => {
     }
     function onError(cause) {
       connectReq.removeAllListeners();
-      debug("tunneling socket could not be established, cause=%s\n", cause.message, cause.stack);
+      debug(`tunneling socket could not be established, cause=%s
+`, cause.message, cause.stack);
       var error = new Error("tunneling socket could not be established, " + "cause=" + cause.message);
       error.code = "ECONNRESET";
       options.request.emit("error", error);
@@ -497,8 +512,7 @@ var require_tunnel = __commonJS((exports) => {
       console.error.apply(console, args);
     };
   } else {
-    debug = function() {
-    };
+    debug = function() {};
   }
   exports.debug = debug;
 });
@@ -926,8 +940,7 @@ var require_util = __commonJS((exports, module) => {
   var { stringify } = __require("querystring");
   var { headerNameLowerCasedRecord } = require_constants();
   var [nodeMajor, nodeMinor] = process.versions.node.split(".").map((v) => Number(v));
-  function nop() {
-  }
+  function nop() {}
   function isStream(obj) {
     return obj && typeof obj === "object" && typeof obj.pipe === "function" && typeof obj.on === "function";
   }
@@ -1504,8 +1517,7 @@ var require_PartStream = __commonJS((exports, module) => {
     ReadableStream.call(this, opts);
   }
   inherits(PartStream, ReadableStream);
-  PartStream.prototype._read = function(n) {
-  };
+  PartStream.prototype._read = function(n) {};
   module.exports = PartStream;
 });
 
@@ -1528,7 +1540,9 @@ var require_HeaderParser = __commonJS((exports, module) => {
   var inherits = __require("node:util").inherits;
   var getLimit = require_getLimit();
   var StreamSearch = require_sbmh();
-  var B_DCRLF = Buffer.from("\r\n\r\n");
+  var B_DCRLF = Buffer.from(`\r
+\r
+`);
   var RE_CRLF = /\r\n/g;
   var RE_HDR = /^([^:]+):[ \t]?([\x00-\xFF]+)?$/;
   function HeaderParser(cfg) {
@@ -1628,9 +1642,9 @@ var require_Dicer = __commonJS((exports, module) => {
   var HeaderParser = require_HeaderParser();
   var DASH = 45;
   var B_ONEDASH = Buffer.from("-");
-  var B_CRLF = Buffer.from("\r\n");
-  var EMPTY_FN = function() {
-  };
+  var B_CRLF = Buffer.from(`\r
+`);
+  var EMPTY_FN = function() {};
   function Dicer(cfg) {
     if (!(this instanceof Dicer)) {
       return new Dicer(cfg);
@@ -1730,7 +1744,8 @@ var require_Dicer = __commonJS((exports, module) => {
   };
   Dicer.prototype.setBoundary = function(boundary) {
     const self = this;
-    this._bparser = new StreamSearch("\r\n--" + boundary);
+    this._bparser = new StreamSearch(`\r
+--` + boundary);
     this._bparser.on("info", function(isMatch, data, start, end) {
       self._oninfo(isMatch, data, start, end);
     });
@@ -1946,8 +1961,7 @@ var require_decodeText = __commonJS((exports, module) => {
       if (textDecoders.has(exports.toString())) {
         try {
           return textDecoders.get(exports).decode(data);
-        } catch {
-        }
+        } catch {}
       }
       return typeof data === "string" ? data : data.toString();
     }
@@ -1966,7 +1980,7 @@ var require_parseParams = __commonJS((exports, module) => {
   var decodeText = require_decodeText();
   var RE_ENCODED = /%[a-fA-F0-9][a-fA-F0-9]/g;
   var EncodedLookup = {
-    "%00": "\0",
+    "%00": "\x00",
     "%01": "\x01",
     "%02": "\x02",
     "%03": "\x03",
@@ -1984,8 +1998,8 @@ var require_parseParams = __commonJS((exports, module) => {
     "%0B": "\v",
     "%0c": "\f",
     "%0C": "\f",
-    "%0d": `\r`,
-    "%0D": `\r`,
+    "%0d": "\r",
+    "%0D": "\r",
     "%0e": "\x0E",
     "%0E": "\x0E",
     "%0f": "\x0F",
@@ -2142,316 +2156,316 @@ var require_parseParams = __commonJS((exports, module) => {
     "%7D": "}",
     "%7e": "~",
     "%7E": "~",
-    "%7f": "\x7F",
-    "%7F": "\x7F",
-    "%80": "\x80",
-    "%81": "\x81",
-    "%82": "\x82",
-    "%83": "\x83",
-    "%84": "\x84",
-    "%85": "\x85",
-    "%86": "\x86",
-    "%87": "\x87",
-    "%88": "\x88",
-    "%89": "\x89",
-    "%8a": "\x8A",
-    "%8A": "\x8A",
-    "%8b": "\x8B",
-    "%8B": "\x8B",
-    "%8c": "\x8C",
-    "%8C": "\x8C",
-    "%8d": "\x8D",
-    "%8D": "\x8D",
-    "%8e": "\x8E",
-    "%8E": "\x8E",
-    "%8f": "\x8F",
-    "%8F": "\x8F",
-    "%90": "\x90",
-    "%91": "\x91",
-    "%92": "\x92",
-    "%93": "\x93",
-    "%94": "\x94",
-    "%95": "\x95",
-    "%96": "\x96",
-    "%97": "\x97",
-    "%98": "\x98",
-    "%99": "\x99",
-    "%9a": "\x9A",
-    "%9A": "\x9A",
-    "%9b": "\x9B",
-    "%9B": "\x9B",
-    "%9c": "\x9C",
-    "%9C": "\x9C",
-    "%9d": "\x9D",
-    "%9D": "\x9D",
-    "%9e": "\x9E",
-    "%9E": "\x9E",
-    "%9f": "\x9F",
-    "%9F": "\x9F",
-    "%a0": "\xA0",
-    "%A0": "\xA0",
-    "%a1": "\xA1",
-    "%A1": "\xA1",
-    "%a2": "\xA2",
-    "%A2": "\xA2",
-    "%a3": "\xA3",
-    "%A3": "\xA3",
-    "%a4": "\xA4",
-    "%A4": "\xA4",
-    "%a5": "\xA5",
-    "%A5": "\xA5",
-    "%a6": "\xA6",
-    "%A6": "\xA6",
-    "%a7": "\xA7",
-    "%A7": "\xA7",
-    "%a8": "\xA8",
-    "%A8": "\xA8",
-    "%a9": "\xA9",
-    "%A9": "\xA9",
-    "%aa": "\xAA",
-    "%Aa": "\xAA",
-    "%aA": "\xAA",
-    "%AA": "\xAA",
-    "%ab": "\xAB",
-    "%Ab": "\xAB",
-    "%aB": "\xAB",
-    "%AB": "\xAB",
-    "%ac": "\xAC",
-    "%Ac": "\xAC",
-    "%aC": "\xAC",
-    "%AC": "\xAC",
-    "%ad": "\xAD",
-    "%Ad": "\xAD",
-    "%aD": "\xAD",
-    "%AD": "\xAD",
-    "%ae": "\xAE",
-    "%Ae": "\xAE",
-    "%aE": "\xAE",
-    "%AE": "\xAE",
-    "%af": "\xAF",
-    "%Af": "\xAF",
-    "%aF": "\xAF",
-    "%AF": "\xAF",
-    "%b0": "\xB0",
-    "%B0": "\xB0",
-    "%b1": "\xB1",
-    "%B1": "\xB1",
-    "%b2": "\xB2",
-    "%B2": "\xB2",
-    "%b3": "\xB3",
-    "%B3": "\xB3",
-    "%b4": "\xB4",
-    "%B4": "\xB4",
-    "%b5": "\xB5",
-    "%B5": "\xB5",
-    "%b6": "\xB6",
-    "%B6": "\xB6",
-    "%b7": "\xB7",
-    "%B7": "\xB7",
-    "%b8": "\xB8",
-    "%B8": "\xB8",
-    "%b9": "\xB9",
-    "%B9": "\xB9",
-    "%ba": "\xBA",
-    "%Ba": "\xBA",
-    "%bA": "\xBA",
-    "%BA": "\xBA",
-    "%bb": "\xBB",
-    "%Bb": "\xBB",
-    "%bB": "\xBB",
-    "%BB": "\xBB",
-    "%bc": "\xBC",
-    "%Bc": "\xBC",
-    "%bC": "\xBC",
-    "%BC": "\xBC",
-    "%bd": "\xBD",
-    "%Bd": "\xBD",
-    "%bD": "\xBD",
-    "%BD": "\xBD",
-    "%be": "\xBE",
-    "%Be": "\xBE",
-    "%bE": "\xBE",
-    "%BE": "\xBE",
-    "%bf": "\xBF",
-    "%Bf": "\xBF",
-    "%bF": "\xBF",
-    "%BF": "\xBF",
-    "%c0": "\xC0",
-    "%C0": "\xC0",
-    "%c1": "\xC1",
-    "%C1": "\xC1",
-    "%c2": "\xC2",
-    "%C2": "\xC2",
-    "%c3": "\xC3",
-    "%C3": "\xC3",
-    "%c4": "\xC4",
-    "%C4": "\xC4",
-    "%c5": "\xC5",
-    "%C5": "\xC5",
-    "%c6": "\xC6",
-    "%C6": "\xC6",
-    "%c7": "\xC7",
-    "%C7": "\xC7",
-    "%c8": "\xC8",
-    "%C8": "\xC8",
-    "%c9": "\xC9",
-    "%C9": "\xC9",
-    "%ca": "\xCA",
-    "%Ca": "\xCA",
-    "%cA": "\xCA",
-    "%CA": "\xCA",
-    "%cb": "\xCB",
-    "%Cb": "\xCB",
-    "%cB": "\xCB",
-    "%CB": "\xCB",
-    "%cc": "\xCC",
-    "%Cc": "\xCC",
-    "%cC": "\xCC",
-    "%CC": "\xCC",
-    "%cd": "\xCD",
-    "%Cd": "\xCD",
-    "%cD": "\xCD",
-    "%CD": "\xCD",
-    "%ce": "\xCE",
-    "%Ce": "\xCE",
-    "%cE": "\xCE",
-    "%CE": "\xCE",
-    "%cf": "\xCF",
-    "%Cf": "\xCF",
-    "%cF": "\xCF",
-    "%CF": "\xCF",
-    "%d0": "\xD0",
-    "%D0": "\xD0",
-    "%d1": "\xD1",
-    "%D1": "\xD1",
-    "%d2": "\xD2",
-    "%D2": "\xD2",
-    "%d3": "\xD3",
-    "%D3": "\xD3",
-    "%d4": "\xD4",
-    "%D4": "\xD4",
-    "%d5": "\xD5",
-    "%D5": "\xD5",
-    "%d6": "\xD6",
-    "%D6": "\xD6",
-    "%d7": "\xD7",
-    "%D7": "\xD7",
-    "%d8": "\xD8",
-    "%D8": "\xD8",
-    "%d9": "\xD9",
-    "%D9": "\xD9",
-    "%da": "\xDA",
-    "%Da": "\xDA",
-    "%dA": "\xDA",
-    "%DA": "\xDA",
-    "%db": "\xDB",
-    "%Db": "\xDB",
-    "%dB": "\xDB",
-    "%DB": "\xDB",
-    "%dc": "\xDC",
-    "%Dc": "\xDC",
-    "%dC": "\xDC",
-    "%DC": "\xDC",
-    "%dd": "\xDD",
-    "%Dd": "\xDD",
-    "%dD": "\xDD",
-    "%DD": "\xDD",
-    "%de": "\xDE",
-    "%De": "\xDE",
-    "%dE": "\xDE",
-    "%DE": "\xDE",
-    "%df": "\xDF",
-    "%Df": "\xDF",
-    "%dF": "\xDF",
-    "%DF": "\xDF",
-    "%e0": "\xE0",
-    "%E0": "\xE0",
-    "%e1": "\xE1",
-    "%E1": "\xE1",
-    "%e2": "\xE2",
-    "%E2": "\xE2",
-    "%e3": "\xE3",
-    "%E3": "\xE3",
-    "%e4": "\xE4",
-    "%E4": "\xE4",
-    "%e5": "\xE5",
-    "%E5": "\xE5",
-    "%e6": "\xE6",
-    "%E6": "\xE6",
-    "%e7": "\xE7",
-    "%E7": "\xE7",
-    "%e8": "\xE8",
-    "%E8": "\xE8",
-    "%e9": "\xE9",
-    "%E9": "\xE9",
-    "%ea": "\xEA",
-    "%Ea": "\xEA",
-    "%eA": "\xEA",
-    "%EA": "\xEA",
-    "%eb": "\xEB",
-    "%Eb": "\xEB",
-    "%eB": "\xEB",
-    "%EB": "\xEB",
-    "%ec": "\xEC",
-    "%Ec": "\xEC",
-    "%eC": "\xEC",
-    "%EC": "\xEC",
-    "%ed": "\xED",
-    "%Ed": "\xED",
-    "%eD": "\xED",
-    "%ED": "\xED",
-    "%ee": "\xEE",
-    "%Ee": "\xEE",
-    "%eE": "\xEE",
-    "%EE": "\xEE",
-    "%ef": "\xEF",
-    "%Ef": "\xEF",
-    "%eF": "\xEF",
-    "%EF": "\xEF",
-    "%f0": "\xF0",
-    "%F0": "\xF0",
-    "%f1": "\xF1",
-    "%F1": "\xF1",
-    "%f2": "\xF2",
-    "%F2": "\xF2",
-    "%f3": "\xF3",
-    "%F3": "\xF3",
-    "%f4": "\xF4",
-    "%F4": "\xF4",
-    "%f5": "\xF5",
-    "%F5": "\xF5",
-    "%f6": "\xF6",
-    "%F6": "\xF6",
-    "%f7": "\xF7",
-    "%F7": "\xF7",
-    "%f8": "\xF8",
-    "%F8": "\xF8",
-    "%f9": "\xF9",
-    "%F9": "\xF9",
-    "%fa": "\xFA",
-    "%Fa": "\xFA",
-    "%fA": "\xFA",
-    "%FA": "\xFA",
-    "%fb": "\xFB",
-    "%Fb": "\xFB",
-    "%fB": "\xFB",
-    "%FB": "\xFB",
-    "%fc": "\xFC",
-    "%Fc": "\xFC",
-    "%fC": "\xFC",
-    "%FC": "\xFC",
-    "%fd": "\xFD",
-    "%Fd": "\xFD",
-    "%fD": "\xFD",
-    "%FD": "\xFD",
-    "%fe": "\xFE",
-    "%Fe": "\xFE",
-    "%fE": "\xFE",
-    "%FE": "\xFE",
-    "%ff": "\xFF",
-    "%Ff": "\xFF",
-    "%fF": "\xFF",
-    "%FF": "\xFF"
+    "%7f": "",
+    "%7F": "",
+    "%80": "",
+    "%81": "",
+    "%82": "",
+    "%83": "",
+    "%84": "",
+    "%85": "",
+    "%86": "",
+    "%87": "",
+    "%88": "",
+    "%89": "",
+    "%8a": "",
+    "%8A": "",
+    "%8b": "",
+    "%8B": "",
+    "%8c": "",
+    "%8C": "",
+    "%8d": "",
+    "%8D": "",
+    "%8e": "",
+    "%8E": "",
+    "%8f": "",
+    "%8F": "",
+    "%90": "",
+    "%91": "",
+    "%92": "",
+    "%93": "",
+    "%94": "",
+    "%95": "",
+    "%96": "",
+    "%97": "",
+    "%98": "",
+    "%99": "",
+    "%9a": "",
+    "%9A": "",
+    "%9b": "",
+    "%9B": "",
+    "%9c": "",
+    "%9C": "",
+    "%9d": "",
+    "%9D": "",
+    "%9e": "",
+    "%9E": "",
+    "%9f": "",
+    "%9F": "",
+    "%a0": " ",
+    "%A0": " ",
+    "%a1": "¡",
+    "%A1": "¡",
+    "%a2": "¢",
+    "%A2": "¢",
+    "%a3": "£",
+    "%A3": "£",
+    "%a4": "¤",
+    "%A4": "¤",
+    "%a5": "¥",
+    "%A5": "¥",
+    "%a6": "¦",
+    "%A6": "¦",
+    "%a7": "§",
+    "%A7": "§",
+    "%a8": "¨",
+    "%A8": "¨",
+    "%a9": "©",
+    "%A9": "©",
+    "%aa": "ª",
+    "%Aa": "ª",
+    "%aA": "ª",
+    "%AA": "ª",
+    "%ab": "«",
+    "%Ab": "«",
+    "%aB": "«",
+    "%AB": "«",
+    "%ac": "¬",
+    "%Ac": "¬",
+    "%aC": "¬",
+    "%AC": "¬",
+    "%ad": "­",
+    "%Ad": "­",
+    "%aD": "­",
+    "%AD": "­",
+    "%ae": "®",
+    "%Ae": "®",
+    "%aE": "®",
+    "%AE": "®",
+    "%af": "¯",
+    "%Af": "¯",
+    "%aF": "¯",
+    "%AF": "¯",
+    "%b0": "°",
+    "%B0": "°",
+    "%b1": "±",
+    "%B1": "±",
+    "%b2": "²",
+    "%B2": "²",
+    "%b3": "³",
+    "%B3": "³",
+    "%b4": "´",
+    "%B4": "´",
+    "%b5": "µ",
+    "%B5": "µ",
+    "%b6": "¶",
+    "%B6": "¶",
+    "%b7": "·",
+    "%B7": "·",
+    "%b8": "¸",
+    "%B8": "¸",
+    "%b9": "¹",
+    "%B9": "¹",
+    "%ba": "º",
+    "%Ba": "º",
+    "%bA": "º",
+    "%BA": "º",
+    "%bb": "»",
+    "%Bb": "»",
+    "%bB": "»",
+    "%BB": "»",
+    "%bc": "¼",
+    "%Bc": "¼",
+    "%bC": "¼",
+    "%BC": "¼",
+    "%bd": "½",
+    "%Bd": "½",
+    "%bD": "½",
+    "%BD": "½",
+    "%be": "¾",
+    "%Be": "¾",
+    "%bE": "¾",
+    "%BE": "¾",
+    "%bf": "¿",
+    "%Bf": "¿",
+    "%bF": "¿",
+    "%BF": "¿",
+    "%c0": "À",
+    "%C0": "À",
+    "%c1": "Á",
+    "%C1": "Á",
+    "%c2": "Â",
+    "%C2": "Â",
+    "%c3": "Ã",
+    "%C3": "Ã",
+    "%c4": "Ä",
+    "%C4": "Ä",
+    "%c5": "Å",
+    "%C5": "Å",
+    "%c6": "Æ",
+    "%C6": "Æ",
+    "%c7": "Ç",
+    "%C7": "Ç",
+    "%c8": "È",
+    "%C8": "È",
+    "%c9": "É",
+    "%C9": "É",
+    "%ca": "Ê",
+    "%Ca": "Ê",
+    "%cA": "Ê",
+    "%CA": "Ê",
+    "%cb": "Ë",
+    "%Cb": "Ë",
+    "%cB": "Ë",
+    "%CB": "Ë",
+    "%cc": "Ì",
+    "%Cc": "Ì",
+    "%cC": "Ì",
+    "%CC": "Ì",
+    "%cd": "Í",
+    "%Cd": "Í",
+    "%cD": "Í",
+    "%CD": "Í",
+    "%ce": "Î",
+    "%Ce": "Î",
+    "%cE": "Î",
+    "%CE": "Î",
+    "%cf": "Ï",
+    "%Cf": "Ï",
+    "%cF": "Ï",
+    "%CF": "Ï",
+    "%d0": "Ð",
+    "%D0": "Ð",
+    "%d1": "Ñ",
+    "%D1": "Ñ",
+    "%d2": "Ò",
+    "%D2": "Ò",
+    "%d3": "Ó",
+    "%D3": "Ó",
+    "%d4": "Ô",
+    "%D4": "Ô",
+    "%d5": "Õ",
+    "%D5": "Õ",
+    "%d6": "Ö",
+    "%D6": "Ö",
+    "%d7": "×",
+    "%D7": "×",
+    "%d8": "Ø",
+    "%D8": "Ø",
+    "%d9": "Ù",
+    "%D9": "Ù",
+    "%da": "Ú",
+    "%Da": "Ú",
+    "%dA": "Ú",
+    "%DA": "Ú",
+    "%db": "Û",
+    "%Db": "Û",
+    "%dB": "Û",
+    "%DB": "Û",
+    "%dc": "Ü",
+    "%Dc": "Ü",
+    "%dC": "Ü",
+    "%DC": "Ü",
+    "%dd": "Ý",
+    "%Dd": "Ý",
+    "%dD": "Ý",
+    "%DD": "Ý",
+    "%de": "Þ",
+    "%De": "Þ",
+    "%dE": "Þ",
+    "%DE": "Þ",
+    "%df": "ß",
+    "%Df": "ß",
+    "%dF": "ß",
+    "%DF": "ß",
+    "%e0": "à",
+    "%E0": "à",
+    "%e1": "á",
+    "%E1": "á",
+    "%e2": "â",
+    "%E2": "â",
+    "%e3": "ã",
+    "%E3": "ã",
+    "%e4": "ä",
+    "%E4": "ä",
+    "%e5": "å",
+    "%E5": "å",
+    "%e6": "æ",
+    "%E6": "æ",
+    "%e7": "ç",
+    "%E7": "ç",
+    "%e8": "è",
+    "%E8": "è",
+    "%e9": "é",
+    "%E9": "é",
+    "%ea": "ê",
+    "%Ea": "ê",
+    "%eA": "ê",
+    "%EA": "ê",
+    "%eb": "ë",
+    "%Eb": "ë",
+    "%eB": "ë",
+    "%EB": "ë",
+    "%ec": "ì",
+    "%Ec": "ì",
+    "%eC": "ì",
+    "%EC": "ì",
+    "%ed": "í",
+    "%Ed": "í",
+    "%eD": "í",
+    "%ED": "í",
+    "%ee": "î",
+    "%Ee": "î",
+    "%eE": "î",
+    "%EE": "î",
+    "%ef": "ï",
+    "%Ef": "ï",
+    "%eF": "ï",
+    "%EF": "ï",
+    "%f0": "ð",
+    "%F0": "ð",
+    "%f1": "ñ",
+    "%F1": "ñ",
+    "%f2": "ò",
+    "%F2": "ò",
+    "%f3": "ó",
+    "%F3": "ó",
+    "%f4": "ô",
+    "%F4": "ô",
+    "%f5": "õ",
+    "%F5": "õ",
+    "%f6": "ö",
+    "%F6": "ö",
+    "%f7": "÷",
+    "%F7": "÷",
+    "%f8": "ø",
+    "%F8": "ø",
+    "%f9": "ù",
+    "%F9": "ù",
+    "%fa": "ú",
+    "%Fa": "ú",
+    "%fA": "ú",
+    "%FA": "ú",
+    "%fb": "û",
+    "%Fb": "û",
+    "%fB": "û",
+    "%FB": "û",
+    "%fc": "ü",
+    "%Fc": "ü",
+    "%fC": "ü",
+    "%FC": "ü",
+    "%fd": "ý",
+    "%Fd": "ý",
+    "%fD": "ý",
+    "%FD": "ý",
+    "%fe": "þ",
+    "%Fe": "þ",
+    "%fE": "þ",
+    "%FE": "þ",
+    "%ff": "ÿ",
+    "%Ff": "ÿ",
+    "%fF": "ÿ",
+    "%FF": "ÿ"
   };
   function encodedReplacer(match) {
     return EncodedLookup[match];
@@ -2840,8 +2854,7 @@ var require_multipart = __commonJS((exports, module) => {
     this.truncated = false;
   }
   inherits(FileStream, Readable);
-  FileStream.prototype._read = function(n) {
-  };
+  FileStream.prototype._read = function(n) {};
   module.exports = Multipart;
 });
 
@@ -3436,7 +3449,7 @@ var require_constants2 = __commonJS((exports, module) => {
     }
   })();
   var channel;
-  var structuredClone = globalThis.structuredClone ?? function structuredClone(value, options = undefined) {
+  var structuredClone = globalThis.structuredClone ?? function structuredClone2(value, options = undefined) {
     if (arguments.length === 0) {
       throw new TypeError("missing argument");
     }
@@ -3522,8 +3535,7 @@ var require_util2 = __commonJS((exports, module) => {
     crypto = __require("crypto");
     const possibleRelevantHashes = ["sha256", "sha384", "sha512"];
     supportedHashes = crypto.getHashes().filter((hash) => possibleRelevantHashes.includes(hash));
-  } catch {
-  }
+  } catch {}
   function responseURL(response) {
     const urlList = response.urlList;
     const length = urlList.length;
@@ -3606,7 +3618,8 @@ var require_util2 = __commonJS((exports, module) => {
     if (potentialValue.startsWith("\t") || potentialValue.startsWith(" ") || potentialValue.endsWith("\t") || potentialValue.endsWith(" ")) {
       return false;
     }
-    if (potentialValue.includes("\0") || potentialValue.includes("\r") || potentialValue.includes("\n")) {
+    if (potentialValue.includes("\x00") || potentialValue.includes("\r") || potentialValue.includes(`
+`)) {
       return false;
     }
     return true;
@@ -3879,8 +3892,7 @@ var require_util2 = __commonJS((exports, module) => {
     }
     return true;
   }
-  function tryUpgradeRequestToAPotentiallyTrustworthyURL(request) {
-  }
+  function tryUpgradeRequestToAPotentiallyTrustworthyURL(request) {}
   function sameOrigin(A, B) {
     if (A.origin === B.origin && A.origin === "null") {
       return true;
@@ -4681,7 +4693,8 @@ var require_dataURL = __commonJS((exports, module) => {
     return serialization;
   }
   function isHTTPWhiteSpace(char) {
-    return char === "\r" || char === "\n" || char === "\t" || char === " ";
+    return char === "\r" || char === `
+` || char === "\t" || char === " ";
   }
   function removeHTTPWhitespace(str, leading = true, trailing = true) {
     let lead = 0;
@@ -4697,7 +4710,8 @@ var require_dataURL = __commonJS((exports, module) => {
     return str.slice(lead, trail + 1);
   }
   function isASCIIWhitespace(char) {
-    return char === "\r" || char === "\n" || char === "\t" || char === "\f" || char === " ";
+    return char === "\r" || char === `
+` || char === "\t" || char === "\f" || char === " ";
   }
   function removeASCIIWhitespace(str, leading = true, trailing = true) {
     let lead = 0;
@@ -4893,9 +4907,11 @@ var require_file = __commonJS((exports, module) => {
     return bytes;
   }
   function convertLineEndingsNative(s) {
-    let nativeLineEnding = "\n";
+    let nativeLineEnding = `
+`;
     if (process.platform === "win32") {
-      nativeLineEnding = "\r\n";
+      nativeLineEnding = `\r
+`;
     }
     return s.replace(/\r?\n/g, nativeLineEnding);
   }
@@ -5079,8 +5095,7 @@ var require_body = __commonJS((exports, module) => {
           controller.enqueue(typeof source === "string" ? textEncoder.encode(source) : source);
           queueMicrotask(() => readableStreamClose(controller));
         },
-        start() {
-        },
+        start() {},
         type: undefined
       });
     }
@@ -5101,21 +5116,29 @@ var require_body = __commonJS((exports, module) => {
       source = new Uint8Array(object.buffer.slice(object.byteOffset, object.byteOffset + object.byteLength));
     } else if (util.isFormDataLike(object)) {
       const boundary = `----formdata-undici-0${`${Math.floor(Math.random() * 100000000000)}`.padStart(11, "0")}`;
-      const prefix = `--${boundary}\r\nContent-Disposition: form-data`;
+      const prefix = `--${boundary}\r
+Content-Disposition: form-data`;
       /*! formdata-polyfill. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
       const escape = (str) => str.replace(/\n/g, "%0A").replace(/\r/g, "%0D").replace(/"/g, "%22");
-      const normalizeLinefeeds = (value) => value.replace(/\r?\n|\r/g, "\r\n");
+      const normalizeLinefeeds = (value) => value.replace(/\r?\n|\r/g, `\r
+`);
       const blobParts = [];
       const rn = new Uint8Array([13, 10]);
       length = 0;
       let hasUnknownSizeValue = false;
       for (const [name, value] of object) {
         if (typeof value === "string") {
-          const chunk2 = textEncoder.encode(prefix + `; name="${escape(normalizeLinefeeds(name))}"` + `\r\n\r\n${normalizeLinefeeds(value)}\r\n`);
+          const chunk2 = textEncoder.encode(prefix + `; name="${escape(normalizeLinefeeds(name))}"` + `\r
+\r
+${normalizeLinefeeds(value)}\r
+`);
           blobParts.push(chunk2);
           length += chunk2.byteLength;
         } else {
-          const chunk2 = textEncoder.encode(`${prefix}; name="${escape(normalizeLinefeeds(name))}"` + (value.name ? `; filename="${escape(value.name)}"` : "") + "\r\n" + `Content-Type: ${value.type || "application/octet-stream"}\r\n\r\n`);
+          const chunk2 = textEncoder.encode(`${prefix}; name="${escape(normalizeLinefeeds(name))}"` + (value.name ? `; filename="${escape(value.name)}"` : "") + `\r
+` + `Content-Type: ${value.type || "application/octet-stream"}\r
+\r
+`);
           blobParts.push(chunk2, value, rn);
           if (typeof value.size === "number") {
             length += chunk2.byteLength + value.size + rn.byteLength;
@@ -5547,13 +5570,15 @@ var require_request = __commonJS((exports, module) => {
         const [bodyStream, contentType] = extractBody(body);
         if (this.contentType == null) {
           this.contentType = contentType;
-          this.headers += `content-type: ${contentType}\r\n`;
+          this.headers += `content-type: ${contentType}\r
+`;
         }
         this.body = bodyStream.stream;
         this.contentLength = bodyStream.length;
       } else if (util.isBlobLike(body) && this.contentType == null && body.type) {
         this.contentType = body.type;
-        this.headers += `content-type: ${body.type}\r\n`;
+        this.headers += `content-type: ${body.type}\r
+`;
       }
       util.validateHandler(handler, method, upgrade);
       this.servername = util.getServerName(this.host);
@@ -5685,7 +5710,8 @@ var require_request = __commonJS((exports, module) => {
       return request;
     }
     static [kHTTP2CopyHeaders](raw) {
-      const rawHeaders = raw.split("\r\n");
+      const rawHeaders = raw.split(`\r
+`);
       const headers = {};
       for (const header of rawHeaders) {
         const [key, value] = header.split(": ");
@@ -5707,7 +5733,8 @@ var require_request = __commonJS((exports, module) => {
     if (headerCharRegex.exec(val) !== null) {
       throw new InvalidArgumentError(`invalid ${key} header`);
     }
-    return skipAppend ? val : `${key}: ${val}\r\n`;
+    return skipAppend ? val : `${key}: ${val}\r
+`;
   }
   function processHeader(request, key, val, skipAppend = false) {
     if (val && (typeof val === "object" && !Array.isArray(val))) {
@@ -6070,8 +6097,7 @@ var require_connect = __commonJS((exports, module) => {
   }
   function setupTimeout(onConnectTimeout2, timeout) {
     if (!timeout) {
-      return () => {
-      };
+      return () => {};
     }
     let s1 = null;
     let s2 = null;
@@ -6289,7 +6315,7 @@ var require_constants3 = __commonJS((exports) => {
     FINISH2[FINISH2["UNSAFE"] = 2] = "UNSAFE";
   })(FINISH = exports.FINISH || (exports.FINISH = {}));
   exports.ALPHA = [];
-  for (let i = "A".charCodeAt(0);i <= "Z".charCodeAt(0); i++) {
+  for (let i = 65;i <= 90; i++) {
     exports.ALPHA.push(String.fromCharCode(i));
     exports.ALPHA.push(String.fromCharCode(i + 32));
   }
@@ -6342,7 +6368,7 @@ var require_constants3 = __commonJS((exports) => {
     "9"
   ];
   exports.ALPHANUM = exports.ALPHA.concat(exports.NUM);
-  exports.MARK = ["-", "_", ".", "!", "~", "*", "\'", "(", ")"];
+  exports.MARK = ["-", "_", ".", "!", "~", "*", "'", "(", ")"];
   exports.USERINFO_CHARS = exports.ALPHANUM.concat(exports.MARK).concat(["%", ";", ":", "&", "=", "+", "$", ","]);
   exports.STRICT_URL_CHAR = [
     "!",
@@ -6350,7 +6376,7 @@ var require_constants3 = __commonJS((exports) => {
     "$",
     "%",
     "&",
-    "\'",
+    "'",
     "(",
     ")",
     "*",
@@ -6387,7 +6413,7 @@ var require_constants3 = __commonJS((exports) => {
     "$",
     "%",
     "&",
-    "\'",
+    "'",
     "*",
     "+",
     "-",
@@ -6513,8 +6539,7 @@ var require_RedirectHandler = __commonJS((exports, module) => {
       }
     }
     onData(chunk) {
-      if (this.location) {
-      } else {
+      if (this.location) {} else {
         return this.handler.onData(chunk);
       }
     }
@@ -6836,7 +6861,8 @@ var require_client = __commonJS((exports, module) => {
       this[kLocalAddress] = localAddress != null ? localAddress : null;
       this[kResuming] = 0;
       this[kNeedDrain] = 0;
-      this[kHostHeader] = `host: ${this[kUrl].hostname}${this[kUrl].port ? `:${this[kUrl].port}` : ""}\r\n`;
+      this[kHostHeader] = `host: ${this[kUrl].hostname}${this[kUrl].port ? `:${this[kUrl].port}` : ""}\r
+`;
       this[kBodyTimeout] = bodyTimeout != null ? bodyTimeout : 300000;
       this[kHeadersTimeout] = headersTimeout != null ? headersTimeout : 300000;
       this[kStrictContentLength] = strictContentLength == null ? true : strictContentLength;
@@ -6886,8 +6912,7 @@ var require_client = __commonJS((exports, module) => {
       const origin = opts.origin || this[kUrl].origin;
       const request = this[kHTTPConnVersion] === "h2" ? Request[kHTTP2BuildRequest](origin, opts, handler) : Request[kHTTP1BuildRequest](origin, opts, handler);
       this[kQueue].push(request);
-      if (this[kResuming]) {
-      } else if (util.bodyLength(request.body) == null && util.isIterable(request.body)) {
+      if (this[kResuming]) {} else if (util.bodyLength(request.body) == null && util.isIterable(request.body)) {
         this[kResuming] = 1;
         process.nextTick(resume, this);
       } else {
@@ -7506,8 +7531,7 @@ var require_client = __commonJS((exports, module) => {
         });
       });
       if (client.destroyed) {
-        util.destroy(socket.on("error", () => {
-        }), new ClientDestroyedError);
+        util.destroy(socket.on("error", () => {}), new ClientDestroyedError);
         return;
       }
       client[kConnecting] = false;
@@ -7762,18 +7786,24 @@ var require_client = __commonJS((exports, module) => {
     if (blocking) {
       socket[kBlocking] = true;
     }
-    let header = `${method} ${path} HTTP/1.1\r\n`;
+    let header = `${method} ${path} HTTP/1.1\r
+`;
     if (typeof host === "string") {
-      header += `host: ${host}\r\n`;
+      header += `host: ${host}\r
+`;
     } else {
       header += client[kHostHeader];
     }
     if (upgrade) {
-      header += `connection: upgrade\r\nupgrade: ${upgrade}\r\n`;
+      header += `connection: upgrade\r
+upgrade: ${upgrade}\r
+`;
     } else if (client[kPipelining] && !socket[kReset]) {
-      header += "connection: keep-alive\r\n";
+      header += `connection: keep-alive\r
+`;
     } else {
-      header += "connection: close\r\n";
+      header += `connection: close\r
+`;
     }
     if (headers) {
       header += headers;
@@ -7783,16 +7813,21 @@ var require_client = __commonJS((exports, module) => {
     }
     if (!body || bodyLength === 0) {
       if (contentLength === 0) {
-        socket.write(`${header}content-length: 0\r\n\r\n`, "latin1");
+        socket.write(`${header}content-length: 0\r
+\r
+`, "latin1");
       } else {
         assert(contentLength === null, "no body must not have content length");
-        socket.write(`${header}\r\n`, "latin1");
+        socket.write(`${header}\r
+`, "latin1");
       }
       request.onRequestSent();
     } else if (util.isBuffer(body)) {
       assert(contentLength === body.byteLength, "buffer body must have content length");
       socket.cork();
-      socket.write(`${header}content-length: ${contentLength}\r\n\r\n`, "latin1");
+      socket.write(`${header}content-length: ${contentLength}\r
+\r
+`, "latin1");
       socket.write(body);
       socket.uncork();
       request.onBodySent(body);
@@ -8089,7 +8124,9 @@ var require_client = __commonJS((exports, module) => {
         h2stream.uncork();
       } else {
         socket.cork();
-        socket.write(`${header}content-length: ${contentLength}\r\n\r\n`, "latin1");
+        socket.write(`${header}content-length: ${contentLength}\r
+\r
+`, "latin1");
         socket.write(buffer);
         socket.uncork();
       }
@@ -8197,13 +8234,18 @@ var require_client = __commonJS((exports, module) => {
           socket[kReset] = true;
         }
         if (contentLength === null) {
-          socket.write(`${header}transfer-encoding: chunked\r\n`, "latin1");
+          socket.write(`${header}transfer-encoding: chunked\r
+`, "latin1");
         } else {
-          socket.write(`${header}content-length: ${contentLength}\r\n\r\n`, "latin1");
+          socket.write(`${header}content-length: ${contentLength}\r
+\r
+`, "latin1");
         }
       }
       if (contentLength === null) {
-        socket.write(`\r\n${len.toString(16)}\r\n`, "latin1");
+        socket.write(`\r
+${len.toString(16)}\r
+`, "latin1");
       }
       this.bytesWritten += len;
       const ret = socket.write(chunk);
@@ -8230,12 +8272,18 @@ var require_client = __commonJS((exports, module) => {
       }
       if (bytesWritten === 0) {
         if (expectsPayload) {
-          socket.write(`${header}content-length: 0\r\n\r\n`, "latin1");
+          socket.write(`${header}content-length: 0\r
+\r
+`, "latin1");
         } else {
-          socket.write(`${header}\r\n`, "latin1");
+          socket.write(`${header}\r
+`, "latin1");
         }
       } else if (contentLength === null) {
-        socket.write("\r\n0\r\n\r\n", "latin1");
+        socket.write(`\r
+0\r
+\r
+`, "latin1");
       }
       if (contentLength !== null && bytesWritten !== contentLength) {
         if (client[kStrictContentLength]) {
@@ -8891,8 +8939,7 @@ var require_readable = __commonJS((exports, module) => {
   var kBody = Symbol("kBody");
   var kAbort = Symbol("abort");
   var kContentType = Symbol("kContentType");
-  var noop = () => {
-  };
+  var noop = () => {};
   module.exports = class BodyReadable extends Readable {
     constructor({
       resume,
@@ -9068,8 +9115,7 @@ var require_readable = __commonJS((exports, module) => {
       });
     }
     consume2.stream.resume();
-    while (consume2.stream.read() != null) {
-    }
+    while (consume2.stream.read() != null) {}
   }
   function consumeEnd(consume2) {
     const { type, body, resolve, stream, length } = consume2;
@@ -9153,8 +9199,7 @@ var require_util3 = __commonJS((exports, module) => {
         process.nextTick(callback, new ResponseStatusCodeError(`Response status code ${statusCode}${statusMessage ? `: ${statusMessage}` : ""}`, statusCode, headers, payload));
         return;
       }
-    } catch (err) {
-    }
+    } catch (err) {}
     process.nextTick(callback, new ResponseStatusCodeError(`Response status code ${statusCode}${statusMessage ? `: ${statusMessage}` : ""}`, statusCode, headers));
   }
   module.exports = { getResolveErrorBodyCallback };
@@ -10156,8 +10201,7 @@ var require_mock_utils = __commonJS((exports, module) => {
       handler.onComplete(responseTrailers);
       deleteMockDispatch(mockDispatches, key);
     }
-    function resume() {
-    }
+    function resume() {}
     return true;
   }
   function buildMockDispatch() {
@@ -10505,7 +10549,7 @@ var require_pending_interceptors_formatter = __commonJS((exports, module) => {
         Origin: origin,
         Path: path,
         "Status code": statusCode,
-        Persistent: persist ? "\u2705" : "\u274C",
+        Persistent: persist ? "✅" : "❌",
         Invocations: timesInvoked,
         Remaining: persist ? Infinity : times - timesInvoked
       }));
@@ -10737,8 +10781,7 @@ var require_proxy_agent = __commonJS((exports, module) => {
               }
             });
             if (statusCode !== 200) {
-              socket.on("error", () => {
-              }).destroy();
+              socket.on("error", () => {}).destroy();
               callback(new RequestAbortedError(`Proxy response (${statusCode}) !== 200 when HTTP Tunneling`));
             }
             if (opts2.protocol !== "https:") {
@@ -11155,8 +11198,7 @@ var require_headers = __commonJS((exports, module) => {
     }
     if (headers[kGuard] === "immutable") {
       throw new TypeError("immutable");
-    } else if (headers[kGuard] === "request-no-cors") {
-    }
+    } else if (headers[kGuard] === "request-no-cors") {}
     return headers[kHeadersList].append(name, value);
   }
 
@@ -11267,8 +11309,7 @@ var require_headers = __commonJS((exports, module) => {
       }
       if (this[kGuard] === "immutable") {
         throw new TypeError("immutable");
-      } else if (this[kGuard] === "request-no-cors") {
-      }
+      } else if (this[kGuard] === "request-no-cors") {}
       if (!this[kHeadersList].contains(name)) {
         return;
       }
@@ -11321,8 +11362,7 @@ var require_headers = __commonJS((exports, module) => {
       }
       if (this[kGuard] === "immutable") {
         throw new TypeError("immutable");
-      } else if (this[kGuard] === "request-no-cors") {
-      }
+      } else if (this[kGuard] === "request-no-cors") {}
       this[kHeadersList].set(name, value);
     }
     getSetCookie() {
@@ -11997,8 +12037,7 @@ var require_request2 = __commonJS((exports, module) => {
             } else if (getEventListeners(signal, "abort").length >= defaultMaxListeners) {
               setMaxListeners(100, signal);
             }
-          } catch {
-          }
+          } catch {}
           util.addAbortListener(signal, abort);
           requestFinalizer.register(ac, { signal, abort });
         }
@@ -12587,10 +12626,8 @@ var require_fetch = __commonJS((exports, module) => {
     if (!request.headersList.contains("accept-language")) {
       request.headersList.append("accept-language", "*");
     }
-    if (request.priority === null) {
-    }
-    if (subresourceSet.has(request.destination)) {
-    }
+    if (request.priority === null) {}
+    if (subresourceSet.has(request.destination)) {}
     mainFetch(fetchParams).catch((err) => {
       fetchParams.controller.terminate(err);
     });
@@ -12640,8 +12677,7 @@ var require_fetch = __commonJS((exports, module) => {
       return response;
     }
     if (response.status !== 0 && !response.internalResponse) {
-      if (request.responseTainting === "cors") {
-      }
+      if (request.responseTainting === "cors") {}
       if (request.responseTainting === "basic") {
         response = filterResponse(response, "basic");
       } else if (request.responseTainting === "cors") {
@@ -12777,8 +12813,7 @@ var require_fetch = __commonJS((exports, module) => {
         controller.enqueue(chunk);
       };
       const transformStream = new TransformStream({
-        start() {
-        },
+        start() {},
         transform: identityTransformAlgorithm,
         flush: processResponseEndOfBody
       }, {
@@ -12808,8 +12843,7 @@ var require_fetch = __commonJS((exports, module) => {
     let response = null;
     let actualResponse = null;
     const timingInfo = fetchParams.timingInfo;
-    if (request.serviceWorkers === "all") {
-    }
+    if (request.serviceWorkers === "all") {}
     if (response === null) {
       if (request.redirect === "follow") {
         request.serviceWorkers = "none";
@@ -12923,8 +12957,7 @@ var require_fetch = __commonJS((exports, module) => {
     if (contentLengthHeaderValue != null) {
       httpRequest.headersList.append("content-length", contentLengthHeaderValue);
     }
-    if (contentLength != null && httpRequest.keepalive) {
-    }
+    if (contentLength != null && httpRequest.keepalive) {}
     if (httpRequest.referrer instanceof URL) {
       httpRequest.headersList.append("referer", isomorphicEncode(httpRequest.referrer.href));
     }
@@ -12958,22 +12991,18 @@ var require_fetch = __commonJS((exports, module) => {
       }
     }
     httpRequest.headersList.delete("host");
-    if (includeCredentials) {
-    }
+    if (includeCredentials) {}
     if (httpCache == null) {
       httpRequest.cache = "no-store";
     }
-    if (httpRequest.mode !== "no-store" && httpRequest.mode !== "reload") {
-    }
+    if (httpRequest.mode !== "no-store" && httpRequest.mode !== "reload") {}
     if (response == null) {
       if (httpRequest.mode === "only-if-cached") {
         return makeNetworkError("only if cached");
       }
       const forwardResponse = await httpNetworkFetch(httpFetchParams, includeCredentials, isNewConnectionFetch);
-      if (!safeMethodsSet.has(httpRequest.method) && forwardResponse.status >= 200 && forwardResponse.status <= 399) {
-      }
-      if (revalidatingFlag && forwardResponse.status === 304) {
-      }
+      if (!safeMethodsSet.has(httpRequest.method) && forwardResponse.status >= 200 && forwardResponse.status <= 399) {}
+      if (revalidatingFlag && forwardResponse.status === 304) {}
       if (response == null) {
         response = forwardResponse;
       }
@@ -12999,8 +13028,7 @@ var require_fetch = __commonJS((exports, module) => {
       fetchParams.controller.connection.destroy();
       response = await httpNetworkOrCacheFetch(fetchParams, isAuthenticationFetch, true);
     }
-    if (isAuthenticationFetch) {
-    }
+    if (isAuthenticationFetch) {}
     return response;
   }
   async function httpNetworkFetch(fetchParams, includeCredentials = false, forceNewConnection = false) {
@@ -13023,9 +13051,7 @@ var require_fetch = __commonJS((exports, module) => {
       request.cache = "no-store";
     }
     const newConnection = forceNewConnection ? "yes" : "no";
-    if (request.mode === "websocket") {
-    } else {
-    }
+    if (request.mode === "websocket") {} else {}
     let requestBody = null;
     if (request.body == null && fetchParams.processRequestEndOfBody) {
       queueMicrotask(() => fetchParams.processRequestEndOfBody());
@@ -13240,9 +13266,7 @@ var require_fetch = __commonJS((exports, module) => {
             status,
             statusText,
             headersList: headers[kHeadersList],
-            body: decoders.length ? pipeline(this.body, ...decoders, () => {
-            }) : this.body.on("error", () => {
-            })
+            body: decoders.length ? pipeline(this.body, ...decoders, () => {}) : this.body.on("error", () => {})
           });
           return true;
         },
@@ -15497,8 +15521,7 @@ var require_connection = __commonJS((exports, module) => {
   var crypto;
   try {
     crypto = __require("crypto");
-  } catch {
-  }
+  } catch {}
   function establishWebSocketConnection(url, protocols, ws, onEstablish, options) {
     const requestURL = url;
     requestURL.protocol = url.protocol === "ws:" ? "http:" : "https:";
@@ -15624,8 +15647,7 @@ var require_frame = __commonJS((exports, module) => {
   var crypto;
   try {
     crypto = __require("crypto");
-  } catch {
-  }
+  } catch {}
 
   class WebsocketFrameSend {
     constructor(data) {
@@ -15987,8 +16009,7 @@ var require_websocket = __commonJS((exports, module) => {
           throw new DOMException2(`Reason must be less than 123 bytes; received ${reasonByteLength}`, "SyntaxError");
         }
       }
-      if (this[kReadyState] === WebSocket.CLOSING || this[kReadyState] === WebSocket.CLOSED) {
-      } else if (!isEstablished(this)) {
+      if (this[kReadyState] === WebSocket.CLOSING || this[kReadyState] === WebSocket.CLOSED) {} else if (!isEstablished(this)) {
         failWebsocketConnection(this, "Connection was closed before it was established.");
         this[kReadyState] = WebSocket.CLOSING;
       } else if (!isClosing(this)) {
@@ -16968,8 +16989,7 @@ var require_lib = __commonJS((exports) => {
               response.result = obj;
             }
             response.headers = res.message.headers;
-          } catch (err) {
-          }
+          } catch (err) {}
           if (statusCode > 299) {
             let msg;
             if (obj && obj.message) {
@@ -17152,8 +17172,10 @@ var require_oidc_utils = __commonJS((exports) => {
       return __awaiter(this, undefined, undefined, function* () {
         const httpclient = OidcClient.createHttpClient();
         const res = yield httpclient.getJson(id_token_url).catch((error) => {
-          throw new Error(`Failed to get ID Token. \n 
-        Error Code : ${error.statusCode}\n 
+          throw new Error(`Failed to get ID Token. 
+ 
+        Error Code : ${error.statusCode}
+ 
         Error Message: ${error.message}`);
         });
         const id_token = (_a = res.result) === null || _a === undefined ? undefined : _a.value;
@@ -17232,7 +17254,7 @@ var require_summary = __commonJS((exports) => {
         }
         const pathFromEnv = process.env[exports.SUMMARY_ENV_VAR];
         if (!pathFromEnv) {
-          throw new Error(`Unable to find environment variable for \$${exports.SUMMARY_ENV_VAR}. Check if your runtime environment supports job summaries.`);
+          throw new Error(`Unable to find environment variable for $${exports.SUMMARY_ENV_VAR}. Check if your runtime environment supports job summaries.`);
         }
         try {
           yield access(pathFromEnv, fs_1.constants.R_OK | fs_1.constants.W_OK);
@@ -18507,7 +18529,8 @@ var require_platform = __commonJS((exports) => {
     const { stdout } = yield exec.getExecOutput("lsb_release", ["-i", "-r", "-s"], {
       silent: true
     });
-    const [name, version] = stdout.trim().split("\n");
+    const [name, version] = stdout.trim().split(`
+`);
     return {
       name,
       version
@@ -18642,7 +18665,8 @@ var require_core = __commonJS((exports) => {
   }
   exports.getInput = getInput;
   function getMultilineInput(name, options) {
-    const inputs = getInput(name, options).split("\n").filter((x) => x !== "");
+    const inputs = getInput(name, options).split(`
+`).filter((x) => x !== "");
     if (options && options.trimWhitespace === false) {
       return inputs;
     }
@@ -18657,7 +18681,8 @@ var require_core = __commonJS((exports) => {
       return true;
     if (falseValue.includes(val))
       return false;
-    throw new TypeError(`Input does not meet YAML 1.2 "Core Schema" specification: ${name}\n` + `Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
+    throw new TypeError(`Input does not meet YAML 1.2 "Core Schema" specification: ${name}
+` + `Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
   }
   exports.getBooleanInput = getBooleanInput;
   function setOutput(name, value) {
@@ -18773,8 +18798,7 @@ var require_semver = __commonJS((exports, module) => {
       console.log.apply(console, args);
     };
   } else {
-    debug = function() {
-    };
+    debug = function() {};
   }
   exports.SEMVER_SPEC_VERSION = "2.0.0";
   var MAX_LENGTH = 256;
@@ -18796,9 +18820,9 @@ var require_semver = __commonJS((exports, module) => {
     [LETTERDASHNUMBER, MAX_SAFE_BUILD_LENGTH]
   ];
   function makeSafeRe(value) {
-    for (var i2 = 0;i2 < safeRegexReplacements.length; i2++) {
-      var token = safeRegexReplacements[i2][0];
-      var max = safeRegexReplacements[i2][1];
+    for (var i3 = 0;i3 < safeRegexReplacements.length; i3++) {
+      var token = safeRegexReplacements[i3][0];
+      var max = safeRegexReplacements[i3][1];
       value = value.split(token + "*").join(token + "{0," + max + "}").split(token + "+").join(token + "{1," + max + "}");
     }
     return value;
@@ -18889,14 +18913,14 @@ var require_semver = __commonJS((exports, module) => {
   src[t.HYPHENRANGELOOSE] = "^\\s*(" + src[t.XRANGEPLAINLOOSE] + ")" + "\\s+-\\s+" + "(" + src[t.XRANGEPLAINLOOSE] + ")" + "\\s*$";
   tok("STAR");
   src[t.STAR] = "(<|>)?=?\\s*\\*";
-  for (i = 0;i < R; i++) {
-    debug(i, src[i]);
-    if (!re[i]) {
-      re[i] = new RegExp(src[i]);
-      safeRe[i] = new RegExp(makeSafeRe(src[i]));
+  for (i2 = 0;i2 < R; i2++) {
+    debug(i2, src[i2]);
+    if (!re[i2]) {
+      re[i2] = new RegExp(src[i2]);
+      safeRe[i2] = new RegExp(makeSafeRe(src[i2]));
     }
   }
-  var i;
+  var i2;
   exports.parse = parse;
   function parse(version, options) {
     if (!options || typeof options !== "object") {
@@ -19027,11 +19051,11 @@ var require_semver = __commonJS((exports, module) => {
     } else if (!this.prerelease.length && !other.prerelease.length) {
       return 0;
     }
-    var i2 = 0;
+    var i3 = 0;
     do {
-      var a = this.prerelease[i2];
-      var b = other.prerelease[i2];
-      debug("prerelease compare", i2, a, b);
+      var a = this.prerelease[i3];
+      var b = other.prerelease[i3];
+      debug("prerelease compare", i3, a, b);
       if (a === undefined && b === undefined) {
         return 0;
       } else if (b === undefined) {
@@ -19043,17 +19067,17 @@ var require_semver = __commonJS((exports, module) => {
       } else {
         return compareIdentifiers(a, b);
       }
-    } while (++i2);
+    } while (++i3);
   };
   SemVer.prototype.compareBuild = function(other) {
     if (!(other instanceof SemVer)) {
       other = new SemVer(other, this.options);
     }
-    var i2 = 0;
+    var i3 = 0;
     do {
-      var a = this.build[i2];
-      var b = other.build[i2];
-      debug("prerelease compare", i2, a, b);
+      var a = this.build[i3];
+      var b = other.build[i3];
+      debug("prerelease compare", i3, a, b);
       if (a === undefined && b === undefined) {
         return 0;
       } else if (b === undefined) {
@@ -19065,7 +19089,7 @@ var require_semver = __commonJS((exports, module) => {
       } else {
         return compareIdentifiers(a, b);
       }
-    } while (++i2);
+    } while (++i3);
   };
   SemVer.prototype.inc = function(release, identifier) {
     switch (release) {
@@ -19118,14 +19142,14 @@ var require_semver = __commonJS((exports, module) => {
         if (this.prerelease.length === 0) {
           this.prerelease = [0];
         } else {
-          var i2 = this.prerelease.length;
-          while (--i2 >= 0) {
-            if (typeof this.prerelease[i2] === "number") {
-              this.prerelease[i2]++;
-              i2 = -2;
+          var i3 = this.prerelease.length;
+          while (--i3 >= 0) {
+            if (typeof this.prerelease[i3] === "number") {
+              this.prerelease[i3]++;
+              i3 = -2;
             }
           }
-          if (i2 === -1) {
+          if (i3 === -1) {
             this.prerelease.push(0);
           }
         }
@@ -19677,27 +19701,27 @@ var require_semver = __commonJS((exports, module) => {
         return false;
       }
     }
-    for (var i2 = 0;i2 < this.set.length; i2++) {
-      if (testSet(this.set[i2], version, this.options)) {
+    for (var i3 = 0;i3 < this.set.length; i3++) {
+      if (testSet(this.set[i3], version, this.options)) {
         return true;
       }
     }
     return false;
   };
   function testSet(set2, version, options) {
-    for (var i2 = 0;i2 < set2.length; i2++) {
-      if (!set2[i2].test(version)) {
+    for (var i3 = 0;i3 < set2.length; i3++) {
+      if (!set2[i3].test(version)) {
         return false;
       }
     }
     if (version.prerelease.length && !options.includePrerelease) {
-      for (i2 = 0;i2 < set2.length; i2++) {
-        debug(set2[i2].semver);
-        if (set2[i2].semver === ANY) {
+      for (i3 = 0;i3 < set2.length; i3++) {
+        debug(set2[i3].semver);
+        if (set2[i3].semver === ANY) {
           continue;
         }
-        if (set2[i2].semver.prerelease.length > 0) {
-          var allowed = set2[i2].semver;
+        if (set2[i3].semver.prerelease.length > 0) {
+          var allowed = set2[i3].semver;
           if (allowed.major === version.major && allowed.minor === version.minor && allowed.patch === version.patch) {
             return true;
           }
@@ -19766,8 +19790,8 @@ var require_semver = __commonJS((exports, module) => {
       return minver;
     }
     minver = null;
-    for (var i2 = 0;i2 < range.set.length; ++i2) {
-      var comparators = range.set[i2];
+    for (var i3 = 0;i3 < range.set.length; ++i3) {
+      var comparators = range.set[i3];
       comparators.forEach(function(comparator) {
         var compver = new SemVer(comparator.semver.version);
         switch (comparator.operator) {
@@ -19839,8 +19863,8 @@ var require_semver = __commonJS((exports, module) => {
     if (satisfies(version, range, options)) {
       return false;
     }
-    for (var i2 = 0;i2 < range.set.length; ++i2) {
-      var comparators = range.set[i2];
+    for (var i3 = 0;i3 < range.set.length; ++i3) {
+      var comparators = range.set[i3];
       var high = null;
       var low = null;
       comparators.forEach(function(comparator) {
@@ -20019,7 +20043,8 @@ var require_manifest = __commonJS((exports, module) => {
     } else if (plat === "linux") {
       const lsbContents = module.exports._readLinuxVersionFile();
       if (lsbContents) {
-        const lines = lsbContents.split("\n");
+        const lines = lsbContents.split(`
+`);
         for (const line of lines) {
           const parts = line.split("=");
           if (parts.length === 2 && (parts[0].trim() === "VERSION_ID" || parts[0].trim() === "DISTRIB_RELEASE")) {
@@ -20057,34 +20082,34 @@ var require_rng = __commonJS((exports, module) => {
 // node_modules/uuid/lib/bytesToUuid.js
 var require_bytesToUuid = __commonJS((exports, module) => {
   var byteToHex = [];
-  for (i = 0;i < 256; ++i) {
-    byteToHex[i] = (i + 256).toString(16).substr(1);
+  for (i2 = 0;i2 < 256; ++i2) {
+    byteToHex[i2] = (i2 + 256).toString(16).substr(1);
   }
-  var i;
+  var i2;
   function bytesToUuid(buf, offset) {
-    var i2 = offset || 0;
+    var i3 = offset || 0;
     var bth = byteToHex;
     return [
-      bth[buf[i2++]],
-      bth[buf[i2++]],
-      bth[buf[i2++]],
-      bth[buf[i2++]],
+      bth[buf[i3++]],
+      bth[buf[i3++]],
+      bth[buf[i3++]],
+      bth[buf[i3++]],
       "-",
-      bth[buf[i2++]],
-      bth[buf[i2++]],
+      bth[buf[i3++]],
+      bth[buf[i3++]],
       "-",
-      bth[buf[i2++]],
-      bth[buf[i2++]],
+      bth[buf[i3++]],
+      bth[buf[i3++]],
       "-",
-      bth[buf[i2++]],
-      bth[buf[i2++]],
+      bth[buf[i3++]],
+      bth[buf[i3++]],
       "-",
-      bth[buf[i2++]],
-      bth[buf[i2++]],
-      bth[buf[i2++]],
-      bth[buf[i2++]],
-      bth[buf[i2++]],
-      bth[buf[i2++]]
+      bth[buf[i3++]],
+      bth[buf[i3++]],
+      bth[buf[i3++]],
+      bth[buf[i3++]],
+      bth[buf[i3++]],
+      bth[buf[i3++]]
     ].join("");
   }
   module.exports = bytesToUuid;
@@ -20095,7 +20120,7 @@ var require_v4 = __commonJS((exports, module) => {
   var rng = require_rng();
   var bytesToUuid = require_bytesToUuid();
   function v4(options, buf, offset) {
-    var i = buf && offset || 0;
+    var i2 = buf && offset || 0;
     if (typeof options == "string") {
       buf = options === "binary" ? new Array(16) : null;
       options = null;
@@ -20106,7 +20131,7 @@ var require_v4 = __commonJS((exports, module) => {
     rnds[8] = rnds[8] & 63 | 128;
     if (buf) {
       for (var ii = 0;ii < 16; ++ii) {
-        buf[i + ii] = rnds[ii];
+        buf[i2 + ii] = rnds[ii];
       }
     }
     return buf || bytesToUuid(rnds);
@@ -20221,7 +20246,7 @@ var require_retry_helper = __commonJS((exports) => {
 
 // node_modules/@actions/tool-cache/lib/tool-cache.js
 var require_tool_cache = __commonJS((exports) => {
-  var __dirname = "/Users/khauri/Documents/work/setup-cdi-tools/node_modules/@actions/tool-cache/lib";
+  var __dirname = "/home/runner/work/setup-cdi-tools/setup-cdi-tools/node_modules/@actions/tool-cache/lib";
   var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
     if (k2 === undefined)
       k2 = k;
@@ -20513,10 +20538,10 @@ var require_tool_cache = __commonJS((exports) => {
       const pwshPath = yield io.which("pwsh", false);
       if (pwshPath) {
         const pwshCommand = [
-          `\$ErrorActionPreference = 'Stop' ;`,
+          `$ErrorActionPreference = 'Stop' ;`,
           `try { Add-Type -AssemblyName System.IO.Compression.ZipFile } catch { } ;`,
-          `try { [System.IO.Compression.ZipFile]::ExtractToDirectory('${escapedFile}', '${escapedDest}', \$true) }`,
-          `catch { if ((\$_.Exception.GetType().FullName -eq 'System.Management.Automation.MethodException') -or (\$_.Exception.GetType().FullName -eq 'System.Management.Automation.RuntimeException') ){ Expand-Archive -LiteralPath '${escapedFile}' -DestinationPath '${escapedDest}' -Force } else { throw \$_ } } ;`
+          `try { [System.IO.Compression.ZipFile]::ExtractToDirectory('${escapedFile}', '${escapedDest}', $true) }`,
+          `catch { if (($_.Exception.GetType().FullName -eq 'System.Management.Automation.MethodException') -or ($_.Exception.GetType().FullName -eq 'System.Management.Automation.RuntimeException') ){ Expand-Archive -LiteralPath '${escapedFile}' -DestinationPath '${escapedDest}' -Force } else { throw $_ } } ;`
         ].join(" ");
         const args = [
           "-NoLogo",
@@ -20531,10 +20556,10 @@ var require_tool_cache = __commonJS((exports) => {
         yield exec_1.exec(`"${pwshPath}"`, args);
       } else {
         const powershellCommand = [
-          `\$ErrorActionPreference = 'Stop' ;`,
+          `$ErrorActionPreference = 'Stop' ;`,
           `try { Add-Type -AssemblyName System.IO.Compression.FileSystem } catch { } ;`,
           `if ((Get-Command -Name Expand-Archive -Module Microsoft.PowerShell.Archive -ErrorAction Ignore)) { Expand-Archive -LiteralPath '${escapedFile}' -DestinationPath '${escapedDest}' -Force }`,
-          `else {[System.IO.Compression.ZipFile]::ExtractToDirectory('${escapedFile}', '${escapedDest}', \$true) }`
+          `else {[System.IO.Compression.ZipFile]::ExtractToDirectory('${escapedFile}', '${escapedDest}', $true) }`
         ].join(" ");
         const args = [
           "-NoLogo",
@@ -20731,8 +20756,8 @@ var require_tool_cache = __commonJS((exports) => {
       }
       return -1;
     });
-    for (let i = versions.length - 1;i >= 0; i--) {
-      const potential = versions[i];
+    for (let i2 = versions.length - 1;i2 >= 0; i2--) {
+      const potential = versions[i2];
       const satisfied = semver.satisfies(potential, versionSpec);
       if (satisfied) {
         version = potential;
@@ -20829,7 +20854,9 @@ function formatError(exception, compact) {
   }
   where += "(" + (exception.mark.line + 1) + ":" + (exception.mark.column + 1) + ")";
   if (!compact && exception.mark.snippet) {
-    where += "\n\n" + exception.mark.snippet;
+    where += `
+
+` + exception.mark.snippet;
   }
   return message + " " + where;
 }
@@ -20864,7 +20891,7 @@ function getLine(buffer, lineStart, lineEnd, position, maxLineLength) {
     lineEnd = position + maxHalfLength - tail.length;
   }
   return {
-    str: head + buffer.slice(lineStart, lineEnd).replace(/\t/g, "\u2192") + tail,
+    str: head + buffer.slice(lineStart, lineEnd).replace(/\t/g, "→") + tail,
     pos: position - lineStart + head.length
   };
 }
@@ -20904,16 +20931,20 @@ function makeSnippet(mark, options) {
     if (foundLineNo - i < 0)
       break;
     line = getLine(mark.buffer, lineStarts[foundLineNo - i], lineEnds[foundLineNo - i], mark.position - (lineStarts[foundLineNo] - lineStarts[foundLineNo - i]), maxLineLength);
-    result = common.repeat(" ", options.indent) + padStart((mark.line - i + 1).toString(), lineNoLength) + " | " + line.str + "\n" + result;
+    result = common.repeat(" ", options.indent) + padStart((mark.line - i + 1).toString(), lineNoLength) + " | " + line.str + `
+` + result;
   }
   line = getLine(mark.buffer, lineStarts[foundLineNo], lineEnds[foundLineNo], mark.position, maxLineLength);
-  result += common.repeat(" ", options.indent) + padStart((mark.line + 1).toString(), lineNoLength) + " | " + line.str + "\n";
-  result += common.repeat("-", options.indent + lineNoLength + 3 + line.pos) + "^" + "\n";
+  result += common.repeat(" ", options.indent) + padStart((mark.line + 1).toString(), lineNoLength) + " | " + line.str + `
+`;
+  result += common.repeat("-", options.indent + lineNoLength + 3 + line.pos) + "^" + `
+`;
   for (i = 1;i <= options.linesAfter; i++) {
     if (foundLineNo + i >= lineEnds.length)
       break;
     line = getLine(mark.buffer, lineStarts[foundLineNo + i], lineEnds[foundLineNo + i], mark.position - (lineStarts[foundLineNo] - lineStarts[foundLineNo + i]), maxLineLength);
-    result += common.repeat(" ", options.indent) + padStart((mark.line + i + 1).toString(), lineNoLength) + " | " + line.str + "\n";
+    result += common.repeat(" ", options.indent) + padStart((mark.line + i + 1).toString(), lineNoLength) + " | " + line.str + `
+`;
   }
   return result.replace(/\n$/, "");
 }
@@ -21418,7 +21449,8 @@ var merge = new type("tag:yaml.org,2002:merge", {
   kind: "scalar",
   resolve: resolveYamlMerge
 });
-var BASE64_MAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=\n\r";
+var BASE64_MAP = `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=
+\r`;
 function resolveYamlBinary(data) {
   if (data === null)
     return false;
@@ -21657,8 +21689,8 @@ function fromDecimalCode(c) {
   return -1;
 }
 function simpleEscapeSequence(c) {
-  return c === 48 ? "\0" : c === 97 ? "\x07" : c === 98 ? "\b" : c === 116 ? "\t" : c === 9 ? "\t" : c === 110 ? `
-` : c === 118 ? "\v" : c === 102 ? "\f" : c === 114 ? `\r` : c === 101 ? "\x1B" : c === 32 ? " " : c === 34 ? '"' : c === 47 ? "/" : c === 92 ? "\\" : c === 78 ? "\x85" : c === 95 ? "\xA0" : c === 76 ? "\u2028" : c === 80 ? "\u2029" : "";
+  return c === 48 ? "\x00" : c === 97 ? "\x07" : c === 98 ? "\b" : c === 116 ? "\t" : c === 9 ? "\t" : c === 110 ? `
+` : c === 118 ? "\v" : c === 102 ? "\f" : c === 114 ? "\r" : c === 101 ? "\x1B" : c === 32 ? " " : c === 34 ? '"' : c === 47 ? "/" : c === 92 ? "\\" : c === 78 ? "" : c === 95 ? " " : c === 76 ? "\u2028" : c === 80 ? "\u2029" : "";
 }
 function charFromCodepoint(c) {
   if (c <= 65535) {
@@ -21903,7 +21935,8 @@ function writeFoldedLines(state, count) {
   if (count === 1) {
     state.result += " ";
   } else if (count > 1) {
-    state.result += common.repeat("\n", count - 1);
+    state.result += common.repeat(`
+`, count - 1);
   }
 }
 function readPlainScalar(state, nodeIndent, withinFlowCollection) {
@@ -22194,10 +22227,12 @@ function readBlockScalar(state, nodeIndent) {
     }
     if (state.lineIndent < textIndent) {
       if (chomping === CHOMPING_KEEP) {
-        state.result += common.repeat("\n", didReadContent ? 1 + emptyLines : emptyLines);
+        state.result += common.repeat(`
+`, didReadContent ? 1 + emptyLines : emptyLines);
       } else if (chomping === CHOMPING_CLIP) {
         if (didReadContent) {
-          state.result += "\n";
+          state.result += `
+`;
         }
       }
       break;
@@ -22205,19 +22240,23 @@ function readBlockScalar(state, nodeIndent) {
     if (folding) {
       if (is_WHITE_SPACE(ch)) {
         atMoreIndented = true;
-        state.result += common.repeat("\n", didReadContent ? 1 + emptyLines : emptyLines);
+        state.result += common.repeat(`
+`, didReadContent ? 1 + emptyLines : emptyLines);
       } else if (atMoreIndented) {
         atMoreIndented = false;
-        state.result += common.repeat("\n", emptyLines + 1);
+        state.result += common.repeat(`
+`, emptyLines + 1);
       } else if (emptyLines === 0) {
         if (didReadContent) {
           state.result += " ";
         }
       } else {
-        state.result += common.repeat("\n", emptyLines);
+        state.result += common.repeat(`
+`, emptyLines);
       }
     } else {
-      state.result += common.repeat("\n", didReadContent ? 1 + emptyLines : emptyLines);
+      state.result += common.repeat(`
+`, didReadContent ? 1 + emptyLines : emptyLines);
     }
     didReadContent = true;
     detectedIndent = true;
@@ -22707,19 +22746,20 @@ function loadDocuments(input, options) {
   options = options || {};
   if (input.length !== 0) {
     if (input.charCodeAt(input.length - 1) !== 10 && input.charCodeAt(input.length - 1) !== 13) {
-      input += "\n";
+      input += `
+`;
     }
     if (input.charCodeAt(0) === 65279) {
       input = input.slice(1);
     }
   }
   var state = new State$1(input, options);
-  var nullpos = input.indexOf("\0");
+  var nullpos = input.indexOf("\x00");
   if (nullpos !== -1) {
     state.position = nullpos;
     throwError(state, "null byte is not allowed in input");
   }
-  state.input += "\0";
+  state.input += "\x00";
   while (state.input.charCodeAt(state.position) === 32) {
     state.lineIndent += 1;
     state.position += 1;
@@ -22794,7 +22834,7 @@ ESCAPE_SEQUENCES[11] = "\\v";
 ESCAPE_SEQUENCES[12] = "\\f";
 ESCAPE_SEQUENCES[13] = "\\r";
 ESCAPE_SEQUENCES[27] = "\\e";
-ESCAPE_SEQUENCES[34] = '\\"';
+ESCAPE_SEQUENCES[34] = "\\\"";
 ESCAPE_SEQUENCES[92] = "\\\\";
 ESCAPE_SEQUENCES[133] = "\\N";
 ESCAPE_SEQUENCES[160] = "\\_";
@@ -22883,7 +22923,8 @@ function State(options) {
 function indentString(string, spaces) {
   var ind = common.repeat(" ", spaces), position = 0, next = -1, result = "", line, length = string.length;
   while (position < length) {
-    next = string.indexOf("\n", position);
+    next = string.indexOf(`
+`, position);
     if (next === -1) {
       line = string.slice(position);
       position = length;
@@ -22891,14 +22932,16 @@ function indentString(string, spaces) {
       line = string.slice(position, next + 1);
       position = next + 1;
     }
-    if (line.length && line !== "\n")
+    if (line.length && line !== `
+`)
       result += ind;
     result += line;
   }
   return result;
 }
 function generateNextLine(state, level) {
-  return "\n" + common.repeat(" ", state.indent * level);
+  return `
+` + common.repeat(" ", state.indent * level);
 }
 function testImplicitResolving(state, str2) {
   var index, length, type2;
@@ -22950,7 +22993,7 @@ var STYLE_LITERAL = 3;
 var STYLE_FOLDED = 4;
 var STYLE_DOUBLE = 5;
 function chooseScalarStyle(string, singleLineOnly, indentPerLevel, lineWidth, testAmbiguousType, quotingType, forceQuotes, inblock) {
-  var i;
+  var i2;
   var char = 0;
   var prevChar = null;
   var hasLineBreak = false;
@@ -22959,8 +23002,8 @@ function chooseScalarStyle(string, singleLineOnly, indentPerLevel, lineWidth, te
   var previousLineBreak = -1;
   var plain = isPlainSafeFirst(codePointAt(string, 0)) && isPlainSafeLast(codePointAt(string, string.length - 1));
   if (singleLineOnly || forceQuotes) {
-    for (i = 0;i < string.length; char >= 65536 ? i += 2 : i++) {
-      char = codePointAt(string, i);
+    for (i2 = 0;i2 < string.length; char >= 65536 ? i2 += 2 : i2++) {
+      char = codePointAt(string, i2);
       if (!isPrintable(char)) {
         return STYLE_DOUBLE;
       }
@@ -22968,13 +23011,13 @@ function chooseScalarStyle(string, singleLineOnly, indentPerLevel, lineWidth, te
       prevChar = char;
     }
   } else {
-    for (i = 0;i < string.length; char >= 65536 ? i += 2 : i++) {
-      char = codePointAt(string, i);
+    for (i2 = 0;i2 < string.length; char >= 65536 ? i2 += 2 : i2++) {
+      char = codePointAt(string, i2);
       if (char === CHAR_LINE_FEED) {
         hasLineBreak = true;
         if (shouldTrackWidth) {
-          hasFoldableLine = hasFoldableLine || i - previousLineBreak - 1 > lineWidth && string[previousLineBreak + 1] !== " ";
-          previousLineBreak = i;
+          hasFoldableLine = hasFoldableLine || i2 - previousLineBreak - 1 > lineWidth && string[previousLineBreak + 1] !== " ";
+          previousLineBreak = i2;
         }
       } else if (!isPrintable(char)) {
         return STYLE_DOUBLE;
@@ -22982,7 +23025,7 @@ function chooseScalarStyle(string, singleLineOnly, indentPerLevel, lineWidth, te
       plain = plain && isPlainSafe(char, prevChar, inblock);
       prevChar = char;
     }
-    hasFoldableLine = hasFoldableLine || shouldTrackWidth && (i - previousLineBreak - 1 > lineWidth && string[previousLineBreak + 1] !== " ");
+    hasFoldableLine = hasFoldableLine || shouldTrackWidth && (i2 - previousLineBreak - 1 > lineWidth && string[previousLineBreak + 1] !== " ");
   }
   if (!hasLineBreak && !hasFoldableLine) {
     if (plain && !forceQuotes && !testAmbiguousType(string)) {
@@ -23032,29 +23075,37 @@ function writeScalar(state, string, level, iskey, inblock) {
 }
 function blockHeader(string, indentPerLevel) {
   var indentIndicator = needIndentIndicator(string) ? String(indentPerLevel) : "";
-  var clip = string[string.length - 1] === "\n";
-  var keep = clip && (string[string.length - 2] === "\n" || string === "\n");
+  var clip = string[string.length - 1] === `
+`;
+  var keep = clip && (string[string.length - 2] === `
+` || string === `
+`);
   var chomp = keep ? "+" : clip ? "" : "-";
-  return indentIndicator + chomp + "\n";
+  return indentIndicator + chomp + `
+`;
 }
 function dropEndingNewline(string) {
-  return string[string.length - 1] === "\n" ? string.slice(0, -1) : string;
+  return string[string.length - 1] === `
+` ? string.slice(0, -1) : string;
 }
 function foldString(string, width) {
   var lineRe = /(\n+)([^\n]*)/g;
   var result = function() {
-    var nextLF = string.indexOf("\n");
+    var nextLF = string.indexOf(`
+`);
     nextLF = nextLF !== -1 ? nextLF : string.length;
     lineRe.lastIndex = nextLF;
     return foldLine(string.slice(0, nextLF), width);
   }();
-  var prevMoreIndented = string[0] === "\n" || string[0] === " ";
+  var prevMoreIndented = string[0] === `
+` || string[0] === " ";
   var moreIndented;
   var match;
   while (match = lineRe.exec(string)) {
     var prefix = match[1], line = match[2];
     moreIndented = line[0] === " ";
-    result += prefix + (!prevMoreIndented && !moreIndented && line !== "" ? "\n" : "") + foldLine(line, width);
+    result += prefix + (!prevMoreIndented && !moreIndented && line !== "" ? `
+` : "") + foldLine(line, width);
     prevMoreIndented = moreIndented;
   }
   return result;
@@ -23070,14 +23121,17 @@ function foldLine(line, width) {
     next = match.index;
     if (next - start > width) {
       end = curr > start ? curr : next;
-      result += "\n" + line.slice(start, end);
+      result += `
+` + line.slice(start, end);
       start = end + 1;
     }
     curr = next;
   }
-  result += "\n";
+  result += `
+`;
   if (line.length - start > width && curr > start) {
-    result += line.slice(start, curr) + "\n" + line.slice(curr + 1);
+    result += line.slice(start, curr) + `
+` + line.slice(curr + 1);
   } else {
     result += line.slice(start);
   }
@@ -23087,13 +23141,13 @@ function escapeString(string) {
   var result = "";
   var char = 0;
   var escapeSeq;
-  for (var i = 0;i < string.length; char >= 65536 ? i += 2 : i++) {
-    char = codePointAt(string, i);
+  for (var i2 = 0;i2 < string.length; char >= 65536 ? i2 += 2 : i2++) {
+    char = codePointAt(string, i2);
     escapeSeq = ESCAPE_SEQUENCES[char];
     if (!escapeSeq && isPrintable(char)) {
-      result += string[i];
+      result += string[i2];
       if (char >= 65536)
-        result += string[i + 1];
+        result += string[i2 + 1];
     } else {
       result += escapeSeq || encodeHex(char);
     }
@@ -23365,7 +23419,8 @@ function dump$1(input, options) {
     value = state.replacer.call({ "": value }, "", value);
   }
   if (writeNode(state, 0, value, true, true))
-    return state.dump + "\n";
+    return state.dump + `
+`;
   return "";
 }
 var dump_1 = dump$1;
@@ -23424,7 +23479,173 @@ var jsYaml = {
 var js_yaml_default = jsYaml;
 
 // src/tools.yml
-var tools_default = "helm:\n  repository: https://github.com/helm/helm\n  template: https://get.helm.sh/helm-v${version}-${platform}-${arch}${extension}\n  binaryPath: ${platform}-${arch}\n  platforms:\n    linux:\n      architectures: \n        x64: {as: amd64}\n        arm64: true\n      extension: .tar.gz\n    darwin:\n      architectures: \n        x64: {as: amd64}\n        arm64: true\n      extension: .tar.gz\n    windows:\n      architectures: \n        x64: {as: amd64}\n      extension: .zip\n\nhub:\n  repository: https://github.com/mislav/hub\n  template: https://github.com/mislav/hub/releases/download/v${version}/hub-${platform}-${arch}-${version}${extension}\n  binaryPath: hub-${platform}-${arch}-${version}/bin\n  platforms:\n    linux:\n      architectures: \n        x64: {as: amd64}\n        arm64: true\n      extension: .tgz\n    darwin:\n      architectures: \n        x64: {as: amd64}\n        # hub doesn't have an arm64 release for macOS but the amd64 binary works fine I guess\n        arm64: {as: amd64}\n      extension: .tgz\n    windows:\n      architectures:\n        x64: {as: amd64}\n      binaryPath: bin\n      extension: .exe\n\njq:\n  repository: https://github.com/jqlang/jq\n  template: https://github.com/jqlang/jq/releases/download/jq-${version}/jq-${platform}-${arch}${extension}\n  platforms:\n    linux:\n      architectures: \n        x64: {as: amd64}\n        arm64: true\n    darwin:\n      as: macos\n      architectures: \n        x64: {as: amd64}\n        arm64: true\n    windows:\n      architectures:\n        x64: {as: amd64}\n      extension: .exe\n\nkubectl:\n  repository: https://www.downloadkubernetes.com/\n  template: https://dl.k8s.io/v${version}/bin/${platform}/${arch}/kubectl\n  platforms:\n    linux:\n      architectures: \n        x64: {as: amd64}\n        arm64: true\n    darwin:\n      architectures: \n        x64: {as: amd64}\n        arm64: true\n    windows:\n      architectures:\n        x64: {as: amd64}\n      extension: .exe\n\nkustomize:\n  repository: https://github.com/kubernetes-sigs/kustomize\n  template: https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${version}/kustomize_v${version}_${platform}_${arch}${extension}\n  platforms:\n    linux:\n      architectures: \n        x64: {as: amd64}\n        arm64: true\n      extension: .tar.gz\n    darwin:\n      architectures: \n        x64: {as: amd64}\n        arm64: true\n      extension: .tar.gz\n    windows:\n      architectures: \n        x64: {as: amd64}\n      extension: .zip\n\noras:\n  repository: https://github.com/oras-project/oras\n  template: https://github.com/oras-project/oras/releases/download/v${version}/oras_${version}_${platform}_${arch}${extension}\n  platforms:\n    linux:\n      architectures: \n        x64: {as: amd64}\n        arm64: true\n      extension: .tar.gz\n    darwin:\n      architectures: \n        x64: {as: amd64}\n        arm64: true\n      extension: .tar.gz\n    windows:\n      architectures: \n        x64: {as: amd64}\n      extension: .zip\n\npkl:\n  repository: https://github.com/apple/pkl/releases/download\n  template: https://github.com/apple/pkl/releases/download/${version}/pkl-${platform}-${arch}${extension}\n  platforms:\n    linux:\n      architectures: \n        x64: {as: amd64}\n        arm64: {as: aarch64}\n    darwin:\n      as: macos\n      architectures: \n        x64: {as: amd64}\n        arm64: {as: aarch64}\n    windows:\n      architectures:\n        x64: {as: amd64}\n      extension: .exe\n\nskaffold:\n  repository: https://github.com/GoogleContainerTools/skaffold\n  template: https://github.com/GoogleContainerTools/skaffold/releases/download/v${version}/skaffold-${platform}-${arch}${extension}\n  platforms:\n    linux:\n      architectures: \n        x64: {as: amd64}\n        arm64: true\n    darwin:\n      architectures: \n        x64: {as: amd64}\n        arm64: true\n    windows:\n      architectures:\n        x64: {as: amd64}\n      extension: .exe\n\nyq:\n  repository: https://github.com/mikefarah/yq\n  template: https://github.com/mikefarah/yq/releases/download/v${version}/yq_${platform}_${arch}${extension}\n  platforms:\n    linux:\n      architectures: \n        x64: {as: amd64}\n        arm64: true\n    darwin:\n      architectures: \n        x64: {as: amd64}\n        arm64: true\n    windows:\n      architectures: \n        x64: {as: amd64}\n      extension: .exe\n";
+var tools_default = `helm:
+  repository: https://github.com/helm/helm
+  template: https://get.helm.sh/helm-v\${version}-\${platform}-\${arch}\${extension}
+  binaryPath: \${platform}-\${arch}
+  platforms:
+    linux:
+      architectures: 
+        x64: {as: amd64}
+        arm64: true
+      extension: .tar.gz
+    darwin:
+      architectures: 
+        x64: {as: amd64}
+        arm64: true
+      extension: .tar.gz
+    windows:
+      architectures: 
+        x64: {as: amd64}
+      extension: .zip
+
+hub:
+  repository: https://github.com/mislav/hub
+  template: https://github.com/mislav/hub/releases/download/v\${version}/hub-\${platform}-\${arch}-\${version}\${extension}
+  binaryPath: hub-\${platform}-\${arch}-\${version}/bin
+  platforms:
+    linux:
+      architectures: 
+        x64: {as: amd64}
+        arm64: true
+      extension: .tgz
+    darwin:
+      architectures: 
+        x64: {as: amd64}
+        # hub doesn't have an arm64 release for macOS but the amd64 binary works fine I guess
+        arm64: {as: amd64}
+      extension: .tgz
+    windows:
+      architectures:
+        x64: {as: amd64}
+      binaryPath: bin
+      extension: .exe
+
+jq:
+  repository: https://github.com/jqlang/jq
+  template: https://github.com/jqlang/jq/releases/download/jq-\${version}/jq-\${platform}-\${arch}\${extension}
+  platforms:
+    linux:
+      architectures: 
+        x64: {as: amd64}
+        arm64: true
+    darwin:
+      as: macos
+      architectures: 
+        x64: {as: amd64}
+        arm64: true
+    windows:
+      architectures:
+        x64: {as: amd64}
+      extension: .exe
+
+kubectl:
+  repository: https://www.downloadkubernetes.com/
+  template: https://dl.k8s.io/v\${version}/bin/\${platform}/\${arch}/kubectl
+  platforms:
+    linux:
+      architectures: 
+        x64: {as: amd64}
+        arm64: true
+    darwin:
+      architectures: 
+        x64: {as: amd64}
+        arm64: true
+    windows:
+      architectures:
+        x64: {as: amd64}
+      extension: .exe
+
+kustomize:
+  repository: https://github.com/kubernetes-sigs/kustomize
+  template: https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv\${version}/kustomize_v\${version}_\${platform}_\${arch}\${extension}
+  platforms:
+    linux:
+      architectures: 
+        x64: {as: amd64}
+        arm64: true
+      extension: .tar.gz
+    darwin:
+      architectures: 
+        x64: {as: amd64}
+        arm64: true
+      extension: .tar.gz
+    windows:
+      architectures: 
+        x64: {as: amd64}
+      extension: .zip
+
+oras:
+  repository: https://github.com/oras-project/oras
+  template: https://github.com/oras-project/oras/releases/download/v\${version}/oras_\${version}_\${platform}_\${arch}\${extension}
+  platforms:
+    linux:
+      architectures: 
+        x64: {as: amd64}
+        arm64: true
+      extension: .tar.gz
+    darwin:
+      architectures: 
+        x64: {as: amd64}
+        arm64: true
+      extension: .tar.gz
+    windows:
+      architectures: 
+        x64: {as: amd64}
+      extension: .zip
+
+pkl:
+  repository: https://github.com/apple/pkl/releases/download
+  template: https://github.com/apple/pkl/releases/download/\${version}/pkl-\${platform}-\${arch}\${extension}
+  platforms:
+    linux:
+      architectures: 
+        x64: {as: amd64}
+        arm64: {as: aarch64}
+    darwin:
+      as: macos
+      architectures: 
+        x64: {as: amd64}
+        arm64: {as: aarch64}
+    windows:
+      architectures:
+        x64: {as: amd64}
+      extension: .exe
+
+skaffold:
+  repository: https://github.com/GoogleContainerTools/skaffold
+  template: https://github.com/GoogleContainerTools/skaffold/releases/download/v\${version}/skaffold-\${platform}-\${arch}\${extension}
+  platforms:
+    linux:
+      architectures: 
+        x64: {as: amd64}
+        arm64: true
+    darwin:
+      architectures: 
+        x64: {as: amd64}
+        arm64: true
+    windows:
+      architectures:
+        x64: {as: amd64}
+      extension: .exe
+
+yq:
+  repository: https://github.com/mikefarah/yq
+  template: https://github.com/mikefarah/yq/releases/download/v\${version}/yq_\${platform}_\${arch}\${extension}
+  platforms:
+    linux:
+      architectures: 
+        x64: {as: amd64}
+        arm64: true
+    darwin:
+      architectures: 
+        x64: {as: amd64}
+        arm64: true
+    windows:
+      architectures: 
+        x64: {as: amd64}
+      extension: .exe
+`;
 
 // src/utils.ts
 var core2 = __toESM(require_core(), 1);
@@ -23432,14 +23653,14 @@ var tc = __toESM(require_tool_cache(), 1);
 import * as os from "os";
 import * as fs from "fs";
 import * as path from "path";
-async function getBinary(toolName, version, url) {
+async function getBinary(toolName, version, url, auth, headers) {
   let cachedToolpath;
   cachedToolpath = tc.find(toolName, version);
   if (!cachedToolpath) {
     core2.debug(`Downloading ${toolName} from: ${url}`);
     let downloadPath = null;
     try {
-      downloadPath = await tc.downloadTool(url);
+      downloadPath = await tc.downloadTool(url, undefined, auth, headers);
     } catch (error) {
       throw `Failed to download version ${version}: ${error}`;
     }
@@ -23449,14 +23670,14 @@ async function getBinary(toolName, version, url) {
   fs.chmodSync(executablePath, "777");
   return executablePath;
 }
-async function getTarballBinary(toolName, version, url, binaryPath = "") {
+async function getTarballBinary(toolName, version, url, binaryPath = "", auth, headers) {
   let cachedToolpath;
   cachedToolpath = tc.find(toolName, version);
   if (!cachedToolpath) {
     core2.debug(`Downloading ${toolName} from: ${url}`);
     let downloadPath = null;
     try {
-      downloadPath = await tc.downloadTool(url);
+      downloadPath = await tc.downloadTool(url, undefined, auth, headers);
     } catch (error) {
       throw `Failed to download version ${version}: ${error}`;
     }
@@ -23547,7 +23768,9 @@ function install(toolName, toolConfig) {
     if (binaryPath) {
       binaryPath = resolveTemplate(binaryPath, variables);
     }
-    const toolPath = unArchive ? await getTarballBinary(toolName, config.version, url, binaryPath) : await getBinary(toolName, config.version, url);
+    const auth = config.token ? `token ${config.token}` : undefined;
+    const headers = config.headers;
+    const toolPath = unArchive ? await getTarballBinary(toolName, config.version, url, binaryPath, auth, headers) : await getBinary(toolName, config.version, url, auth, headers);
     core3.debug(`${toolName} has been cached at ${toolPath}`);
     core3.addPath(path2.dirname(toolPath));
     return toolPath;
