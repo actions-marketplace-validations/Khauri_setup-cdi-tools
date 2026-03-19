@@ -40,6 +40,18 @@ export type PlatformConfig = {
    * The file extension of the downloaded tool. Usually .exe for Windows binaries and empty for linux, but this can be overriden here
    */
   extension?: string,
+
+  /**
+   * Custom headers to include in the download request.
+   */
+  headers?: Record<string, string>,
+
+  /**
+   * A shortcut for setting the Authorization header.
+   * If provided, the value is passed as the `auth` parameter to `@actions/tool-cache` downloadTool,
+   * which sets the Authorization header to `token ${token}`. This format is compatible with GitHub's API.
+   */
+  token?: string,
 }
 
 export type ToolConfig = PlatformConfig & {
@@ -128,10 +140,12 @@ export function install(toolName: string, toolConfig: PlatformConfig) {
     if(binaryPath) {
       binaryPath = resolveTemplate(binaryPath, variables);
     }
+    const auth = config.token ? `token ${config.token}` : undefined;
+    const headers = config.headers;
     // console.log({binaryPath, url, config});
     const toolPath = unArchive 
-      ? await getTarballBinary(toolName, config.version!, url, binaryPath)
-      : await getBinary(toolName, config.version!, url);
+      ? await getTarballBinary(toolName, config.version!, url, binaryPath, auth, headers)
+      : await getBinary(toolName, config.version!, url, auth, headers);
     // TODO: switch from binaryPath to toolPath in this log
     core.debug(`${toolName} has been cached at ${toolPath}`);
     core.addPath(path.dirname(toolPath));
