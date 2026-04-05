@@ -3,11 +3,14 @@ import * as tc from '@actions/tool-cache';
 import * as os from 'os';
 import * as fs from 'fs';
 import * as path from 'path';
+import type { OutgoingHttpHeaders } from 'http';
 
 export async function getBinary(
   toolName: string,
   version: string,
   url: string,
+  auth?: string,
+  headers?: OutgoingHttpHeaders,
 ): Promise<string> {
   let cachedToolpath: string;
   cachedToolpath = tc.find(toolName, version);
@@ -17,7 +20,7 @@ export async function getBinary(
 
     let downloadPath: string | null = null;
     try {
-      downloadPath = await tc.downloadTool(url);
+      downloadPath = await tc.downloadTool(url, undefined, auth, headers);
     } catch (error) {
       throw `Failed to download version ${version}: ${error}`;
     }
@@ -45,6 +48,8 @@ export async function getTarballBinary(
   version: string,
   url: string,
   binaryPath: string = '',
+  auth?: string,
+  headers?: OutgoingHttpHeaders,
 ): Promise<string> {
   let cachedToolpath: string;
   cachedToolpath = tc.find(toolName, version);
@@ -54,7 +59,7 @@ export async function getTarballBinary(
 
     let downloadPath: string | null = null;
     try {
-      downloadPath = await tc.downloadTool(url);
+      downloadPath = await tc.downloadTool(url, undefined, auth, headers);
     } catch (error) {
       throw `Failed to download version ${version}: ${error}`;
     }
